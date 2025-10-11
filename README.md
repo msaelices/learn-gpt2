@@ -42,3 +42,13 @@ Run tests with coverage:
 ```bash
 uv run pytest --cov=gpt2 --cov-report=html
 ```
+
+### Jupyter Notebooks
+
+To explore the educational notebooks in the `notebooks/` directory:
+
+```bash
+uv run jupyter notebook notebooks/
+```
+
+This will start a Jupyter server and open your browser to browse the notebooks.
