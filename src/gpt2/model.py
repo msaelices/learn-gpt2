@@ -64,7 +64,26 @@ class MultiHeadAttention(nn.Module):
         super().__init__()
         assert config.n_embd % config.n_head == 0, "n_embd must be divisible by n_head"
 
-        # TODO: Implement
+        self.n_embd = config.n_embd
+        self.n_head = config.n_head
+        self.head_dim = config.n_embd // config.n_head
+
+        # Combined Q, K, V projection (more efficient than separate projections)
+        self.c_attn = nn.Linear(config.n_embd, 3 * config.n_embd)
+        # Output projection
+        self.c_proj = nn.Linear(config.n_embd, config.n_embd)
+
+        # Dropout layers
+        self.attn_dropout = nn.Dropout(config.attn_pdrop)
+        self.resid_dropout = nn.Dropout(config.resid_pdrop)
+
+        # Causal mask to ensure attention only flows to the left
+        self.register_buffer(
+            "bias",
+            torch.tril(torch.ones(config.n_positions, config.n_positions)).view(
+                1, 1, config.n_positions, config.n_positions
+            ),
+        )
 
     def forward(self, x: Tensor, mask: Tensor | None = None) -> Tensor:
         """Forward pass.
@@ -76,9 +95,47 @@ class MultiHeadAttention(nn.Module):
         Returns:
             Output tensor of shape (batch_size, seq_len, n_embd).
         """
+        batch_size, seq_len, n_embd = x.size()
 
-        # TODO: Implement
-        out = x  # Placeholder
+        # Calculate Q, K, V for all heads in batch
+        qkv = self.c_attn(x)  # (batch_size, seq_len, 3 * n_embd)
+        q, k, v = qkv.split(self.n_embd, dim=2)
+
+        # Reshape to split into multiple heads
+        # (batch_size, n_head, seq_len, head_dim)
+        q = q.view(batch_size, seq_len, self.n_head, self.head_dim).transpose(1, 2)
+        k = k.view(batch_size, seq_len, self.n_head, self.head_dim).transpose(1, 2)
+        v = v.view(batch_size, seq_len, self.n_head, self.head_dim).transpose(1, 2)
+
+        # Compute attention scores
+        # (batch_size, n_head, seq_len, seq_len)
+        attn_scores = (q @ k.transpose(-2, -1)) / (self.head_dim**0.5)
+
+        # Apply causal mask (prevent attending to future positions)
+        attn_scores = attn_scores.masked_fill(
+            self.bias[:, :, :seq_len, :seq_len] == 0, float("-inf")
+        )
+
+        # Apply optional attention mask
+        if mask is not None:
+            attn_scores = attn_scores.masked_fill(mask == 0, float("-inf"))
+
+        # Softmax and dropout
+        attn_weights = torch.softmax(attn_scores, dim=-1)
+        attn_weights = self.attn_dropout(attn_weights)
+
+        # Apply attention to values
+        # (batch_size, n_head, seq_len, head_dim)
+        out = attn_weights @ v
+
+        # Concatenate heads and reshape
+        # (batch_size, seq_len, n_embd)
+        out = out.transpose(1, 2).contiguous().view(batch_size, seq_len, n_embd)
+
+        # Output projection and dropout
+        out = self.c_proj(out)
+        out = self.resid_dropout(out)
+
         return out
 
 
@@ -92,7 +149,11 @@ class FeedForward(nn.Module):
             config: GPT-2 configuration.
         """
         super().__init__()
-        # TODO: Configure the feedforward network properly
+        # Two-layer MLP with GELU activation
+        self.c_fc = nn.Linear(config.n_embd, config.n_inner)
+        self.c_proj = nn.Linear(config.n_inner, config.n_embd)
+        self.dropout = nn.Dropout(config.resid_pdrop)
+        self.gelu = nn.GELU()
 
     def forward(self, x: Tensor) -> Tensor:
         """Forward pass.
@@ -103,7 +164,10 @@ class FeedForward(nn.Module):
         Returns:
             Output tensor of shape (batch_size, seq_len, n_embd).
         """
-        # TODO: Implement the feedforward network
+        x = self.c_fc(x)
+        x = self.gelu(x)
+        x = self.c_proj(x)
+        x = self.dropout(x)
         return x
 
 
@@ -117,7 +181,14 @@ class TransformerBlock(nn.Module):
             config: GPT-2 configuration.
         """
         super().__init__()
-        # TODO: Implement inspecting the GPT2 model from Hugging Face to get the correct implementation
+        # Layer normalization before attention (pre-norm architecture)
+        self.ln_1 = nn.LayerNorm(config.n_embd, eps=config.layer_norm_epsilon)
+        # Multi-head self-attention
+        self.attn = MultiHeadAttention(config)
+        # Layer normalization before feedforward
+        self.ln_2 = nn.LayerNorm(config.n_embd, eps=config.layer_norm_epsilon)
+        # Feedforward network
+        self.mlp = FeedForward(config)
 
     def forward(self, x: Tensor, mask: Tensor | None = None) -> Tensor:
         """Forward pass.
@@ -129,7 +200,10 @@ class TransformerBlock(nn.Module):
         Returns:
             Output tensor of shape (batch_size, seq_len, n_embd).
         """
-        # TODO: Implement the forward pass of the transformer block
+        # Attention block with residual connection
+        x = x + self.attn(self.ln_1(x), mask)
+        # Feedforward block with residual connection
+        x = x + self.mlp(self.ln_2(x))
         return x
 
 
@@ -145,7 +219,43 @@ class GPT2Model(nn.Module):
         super().__init__()
         self.config = config
 
-        # TODO: Implement inspecting the GPT2 model from Hugging Face to get the correct implementation
+        # Token embeddings
+        self.wte = nn.Embedding(config.vocab_size, config.n_embd)
+        # Position embeddings
+        self.wpe = nn.Embedding(config.n_positions, config.n_embd)
+        # Embedding dropout
+        self.drop = nn.Dropout(config.embd_pdrop)
+
+        # Transformer blocks
+        self.h = nn.ModuleList([TransformerBlock(config) for _ in range(config.n_layer)])
+
+        # Final layer normalization
+        self.ln_f = nn.LayerNorm(config.n_embd, eps=config.layer_norm_epsilon)
+
+        # Language model head (projects to vocabulary)
+        self.lm_head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
+
+        # Tie weights between token embeddings and output projection
+        self.lm_head.weight = self.wte.weight
+
+        # Initialize weights
+        self.apply(self._init_weights)
+
+    def _init_weights(self, module: nn.Module) -> None:
+        """Initialize weights for the model.
+
+        Args:
+            module: Module to initialize.
+        """
+        if isinstance(module, nn.Linear):
+            torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
+            if module.bias is not None:
+                torch.nn.init.zeros_(module.bias)
+        elif isinstance(module, nn.Embedding):
+            torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
+        elif isinstance(module, nn.LayerNorm):
+            torch.nn.init.ones_(module.weight)
+            torch.nn.init.zeros_(module.bias)
 
     def forward(self, input_ids: Tensor, attention_mask: Tensor | None = None) -> Tensor:
         """Forward pass.
@@ -157,8 +267,34 @@ class GPT2Model(nn.Module):
         Returns:
             Logits of shape (batch_size, seq_len, vocab_size).
         """
-        # TODO: Implement the forward pass of the GPT-2 model
-        logits = torch.zeros(
-            input_ids.size(0), input_ids.size(1), self.config.vocab_size
-        )  # Placeholder
+        batch_size, seq_len = input_ids.size()
+
+        # Check sequence length
+        assert seq_len <= self.config.n_positions, (
+            f"Sequence length {seq_len} exceeds maximum "
+            f"position embeddings {self.config.n_positions}"
+        )
+
+        # Create position indices
+        position_ids = torch.arange(0, seq_len, dtype=torch.long, device=input_ids.device)
+        position_ids = position_ids.unsqueeze(0).expand(batch_size, seq_len)
+
+        # Get embeddings
+        token_embeddings = self.wte(input_ids)  # (batch_size, seq_len, n_embd)
+        position_embeddings = self.wpe(position_ids)  # (batch_size, seq_len, n_embd)
+
+        # Combine embeddings and apply dropout
+        x = token_embeddings + position_embeddings
+        x = self.drop(x)
+
+        # Pass through transformer blocks
+        for block in self.h:
+            x = block(x, attention_mask)
+
+        # Apply final layer norm
+        x = self.ln_f(x)
+
+        # Project to vocabulary
+        logits = self.lm_head(x)  # (batch_size, seq_len, vocab_size)
+
         return logits
