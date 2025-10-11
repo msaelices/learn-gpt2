@@ -29,6 +29,26 @@ uv sync --all-extras --dev
 
 ## Development
 
+### Code Quality
+
+Run linting with ruff:
+
+```bash
+uv run ruff check .
+```
+
+Format code with ruff:
+
+```bash
+uv run ruff format .
+```
+
+Run type checking with ty:
+
+```bash
+uvx ty check src
+```
+
 ### Running Tests
 
 Run all tests:

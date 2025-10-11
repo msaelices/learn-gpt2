@@ -27,6 +27,15 @@ jobs:
     - name: Install dependencies
       run: uv sync --all-extras --dev
 
+    - name: Run ruff linter
+      run: uv run ruff check .
+
+    - name: Run ruff formatter
+      run: uv run ruff format --check .
+
+    - name: Run type checker (ty)
+      run: uvx ty check src
+
     - name: Run tests
       run: uv run pytest
 
