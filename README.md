@@ -1,6 +1,8 @@
 # gpt2
 
-GPT2 implementations
+GPT-2 implementation for educational purposes only.
+
+This project is a learning resource to understand the architecture and implementation of GPT-2. It is not intended for production use.
 
 ## Setup
 
