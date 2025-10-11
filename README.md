@@ -1,6 +1,6 @@
-# gpt2
+# Learn GPT-2
 
-GPT-2 implementation for educational purposes only.
+Repo to learn how to implement GPT-2 using Pytorch.
 
 This project is a learning resource to understand the architecture and implementation of GPT-2. It is not intended for production use.
 
