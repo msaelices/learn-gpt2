@@ -52,6 +52,7 @@ exclude_lines = [
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+extend-exclude = ["*.ipynb"]
 
 [tool.ruff.lint]
 select = [
@@ -63,7 +64,10 @@ select = [
     "C4",  # flake8-comprehensions
     "UP",  # pyupgrade
 ]
-ignore = []
+ignore = [
+    "E501",  # line too long (educational comments are okay)
+]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = ["B018", "F841"]
+"problems/**/test_*.py" = ["F841"]
