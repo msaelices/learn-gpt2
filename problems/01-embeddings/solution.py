@@ -134,7 +134,7 @@ if __name__ == "__main__":
 
     print(f"Input shape: {input_ids.shape}")
     print(f"Output shape: {output.shape}")
-    print(f"Expected output shape: (2, 10, 768)")
+    print("Expected output shape: (2, 10, 768)")
 
     # Verify shapes
     assert output.shape == (2, 10, 768), "Output shape mismatch!"

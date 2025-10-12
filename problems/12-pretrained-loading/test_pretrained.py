@@ -1,11 +1,12 @@
 """Tests for Problem 12: Loading Pretrained Weights."""
 
 import sys
+
 sys.path.append("../09-gpt2-config")
 
 import pytest
 import torch
-from solution import GPT2Model, GPT2Config
+from solution import GPT2Model
 
 
 def test_from_pretrained_exists():
@@ -65,8 +66,9 @@ def test_output_matches_huggingface():
         hf_logits = hf_model(input_ids).logits
 
     # Outputs should match within tolerance
-    assert torch.allclose(our_logits, hf_logits, atol=1e-5), \
+    assert torch.allclose(our_logits, hf_logits, atol=1e-5), (
         f"Max diff: {(our_logits - hf_logits).abs().max().item()}"
+    )
 
 
 def test_output_matches_on_longer_sequence():
@@ -114,8 +116,9 @@ def test_weight_tying_preserved():
     model = GPT2Model.from_pretrained("gpt2")
 
     # Weight tying should still be in place
-    assert model.lm_head.weight is model.wte.weight, \
+    assert model.lm_head.weight is model.wte.weight, (
         "Weight tying should be preserved after loading"
+    )
 
 
 def test_parameter_count_matches():
@@ -126,8 +129,9 @@ def test_parameter_count_matches():
     total_params = model.get_num_params()
     expected_params = 124439808  # Exact count for GPT-2 small
 
-    assert total_params == expected_params, \
+    assert total_params == expected_params, (
         f"Expected {expected_params:,} parameters, got {total_params:,}"
+    )
 
 
 def test_all_weights_loaded():
@@ -193,8 +197,9 @@ def test_specific_token_predictions():
     hf_top5 = torch.topk(hf_logits[0, -1], 5).indices
 
     # Top predictions should be identical
-    assert torch.equal(our_top5, hf_top5), \
+    assert torch.equal(our_top5, hf_top5), (
         f"Top-5 predictions differ: ours={our_top5.tolist()}, hf={hf_top5.tolist()}"
+    )
 
 
 def test_embedding_weights_match():
@@ -207,14 +212,12 @@ def test_embedding_weights_match():
     our_wte = our_model.wte.weight
     hf_wte = hf_model.transformer.wte.weight
 
-    assert torch.allclose(our_wte, hf_wte, atol=1e-7), \
-        "Token embeddings should match exactly"
+    assert torch.allclose(our_wte, hf_wte, atol=1e-7), "Token embeddings should match exactly"
 
     our_wpe = our_model.wpe.weight
     hf_wpe = hf_model.transformer.wpe.weight
 
-    assert torch.allclose(our_wpe, hf_wpe, atol=1e-7), \
-        "Position embeddings should match exactly"
+    assert torch.allclose(our_wpe, hf_wpe, atol=1e-7), "Position embeddings should match exactly"
 
 
 def test_attention_weights_match():
@@ -229,8 +232,9 @@ def test_attention_weights_match():
     hf_attn = hf_model.transformer.h[0].attn.c_attn.weight
 
     # Our weights should match HuggingFace's transposed weights
-    assert torch.allclose(our_attn, hf_attn.t(), atol=1e-7), \
+    assert torch.allclose(our_attn, hf_attn.t(), atol=1e-7), (
         "Attention weights should match (after transposition)"
+    )
 
 
 def test_ffn_weights_match():
@@ -245,8 +249,9 @@ def test_ffn_weights_match():
     hf_fc = hf_model.transformer.h[0].mlp.c_fc.weight
 
     # Our weights should match HuggingFace's transposed weights
-    assert torch.allclose(our_fc, hf_fc.t(), atol=1e-7), \
+    assert torch.allclose(our_fc, hf_fc.t(), atol=1e-7), (
         "FFN weights should match (after transposition)"
+    )
 
 
 def test_layernorm_weights_match():
@@ -260,15 +265,15 @@ def test_layernorm_weights_match():
     our_ln1 = our_model.h[0].ln_1.weight
     hf_ln1 = hf_model.transformer.h[0].ln_1.weight
 
-    assert torch.allclose(our_ln1, hf_ln1, atol=1e-7), \
-        "LayerNorm weights should match exactly"
+    assert torch.allclose(our_ln1, hf_ln1, atol=1e-7), "LayerNorm weights should match exactly"
 
     # Check final layer norm
     our_ln_f = our_model.ln_f.weight
     hf_ln_f = hf_model.transformer.ln_f.weight
 
-    assert torch.allclose(our_ln_f, hf_ln_f, atol=1e-7), \
+    assert torch.allclose(our_ln_f, hf_ln_f, atol=1e-7), (
         "Final LayerNorm weights should match exactly"
+    )
 
 
 def test_loading_different_sizes():

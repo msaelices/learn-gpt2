@@ -9,7 +9,6 @@ Learning objectives:
 TODO: Implement the MultiHeadAttention class below.
 """
 
-import torch
 import torch.nn as nn
 from torch import Tensor
 

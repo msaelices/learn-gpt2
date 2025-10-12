@@ -10,14 +10,13 @@ TODO: Implement the GPT2Model class below.
 """
 
 import sys
+
 sys.path.append("../09-gpt2-config")
 sys.path.append("../08-transformer-block")
 
-import torch
 import torch.nn as nn
-from torch import Tensor
-
 from solution import GPT2Config  # From Problem 9
+from torch import Tensor
 
 
 class GPT2Model(nn.Module):

@@ -133,7 +133,7 @@ def test_scaling_is_applied():
         expected_scale = 256 ** -0.5  # 1/√256 = 1/16 = 0.0625
 
         # Compute what scaled scores should be
-        expected_scaled_scores = unscaled_scores * expected_scale
+        unscaled_scores * expected_scale
 
         # Get actual attention scores from the forward pass
         # We need to recompute inside forward to access intermediate values
@@ -223,8 +223,8 @@ def test_scaling_helps_with_large_dimensions():
 
         # With scaling, weights should be less peaked (more uniform)
         # Measure this by checking entropy or by checking min/max
-        unscaled_max = unscaled_weights.max().item()
-        scaled_max = scaled_weights.max().item()
+        unscaled_weights.max().item()
+        scaled_weights.max().item()
 
         # Scaled attention should produce less extreme weights
         # (Though this might not always be true depending on the random values)
@@ -295,12 +295,12 @@ def test_scale_factor_calculation():
             q = attention.query(x)
 
             # Expected scale factor
-            expected_scale = n_embd ** -0.5
+            n_embd ** -0.5
 
             # We can verify the scale is correct by checking the variance
             # of scaled scores vs unscaled scores
             k = attention.key(x)
-            unscaled = q @ k.transpose(-2, -1)
+            q @ k.transpose(-2, -1)
 
             # If scaling is applied correctly, scaled variance should be
             # approximately unscaled_variance / n_embd

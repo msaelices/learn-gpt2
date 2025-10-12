@@ -4,15 +4,17 @@ This solution assembles all previous components into a complete GPT-2 language m
 """
 
 import sys
+
 sys.path.append("../09-gpt2-config")
 sys.path.append("../08-transformer-block")
+
+# Import GPT2Config from Problem 9
+import importlib.util
 
 import torch
 import torch.nn as nn
 from torch import Tensor
 
-# Import GPT2Config from Problem 9
-import importlib.util
 spec = importlib.util.spec_from_file_location("gpt2_config", "../09-gpt2-config/solution.py")
 gpt2_config = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(gpt2_config)

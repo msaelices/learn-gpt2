@@ -9,7 +9,6 @@ Learning objectives:
 TODO: Implement NewGELU and FeedForward classes below.
 """
 
-import torch
 import torch.nn as nn
 from torch import Tensor
 

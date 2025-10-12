@@ -119,7 +119,7 @@ if __name__ == "__main__":
 
         # Unscaled scores
         unscaled_scores = q @ k.transpose(-2, -1)
-        print(f"\nUnscaled attention scores:")
+        print("\nUnscaled attention scores:")
         print(f"  Range: {unscaled_scores.min().item():.2f} to {unscaled_scores.max().item():.2f}")
         print(f"  Std: {unscaled_scores.std().item():.2f}")
 

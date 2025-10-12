@@ -2,7 +2,6 @@
 
 import pytest
 import torch
-import torch.nn as nn
 from solution import CausalMultiHeadAttention
 
 

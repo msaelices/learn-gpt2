@@ -10,15 +10,17 @@ TODO: Add weight initialization to the GPT2Model class.
 """
 
 import sys
+
 sys.path.append("../09-gpt2-config")
 sys.path.append("../10-full-model")
+
+# Import from previous problems
+import importlib.util
 
 import torch
 import torch.nn as nn
 from torch import Tensor
 
-# Import from previous problems
-import importlib.util
 spec = importlib.util.spec_from_file_location("gpt2_config", "../09-gpt2-config/solution.py")
 gpt2_config = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(gpt2_config)

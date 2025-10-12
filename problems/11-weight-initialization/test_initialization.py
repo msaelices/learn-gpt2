@@ -1,12 +1,13 @@
 """Tests for Problem 11: Weight Initialization."""
 
 import sys
+
 sys.path.append("../09-gpt2-config")
 
 import pytest
 import torch
 import torch.nn as nn
-from solution import GPT2Model, GPT2Config
+from solution import GPT2Config, GPT2Model
 
 
 def test_model_initialization():

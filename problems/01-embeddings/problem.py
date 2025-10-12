@@ -9,7 +9,6 @@ Learning objectives:
 TODO: Complete the Embeddings class below by implementing __init__ and forward methods.
 """
 
-import torch
 import torch.nn as nn
 from torch import Tensor
 

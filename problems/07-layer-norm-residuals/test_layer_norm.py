@@ -34,7 +34,8 @@ def test_residual_forward_shape():
     res.eval()
 
     # Identity sublayer (just returns input)
-    identity = lambda x: x
+    def identity(x):
+        return x
 
     batch_size, seq_len, n_embd = 2, 10, 768
     x = torch.randn(batch_size, seq_len, n_embd)
@@ -49,7 +50,8 @@ def test_residual_connection_applied():
     res.eval()
 
     # Zero sublayer (returns zeros)
-    zero_sublayer = lambda x: torch.zeros_like(x)
+    def zero_sublayer(x):
+        return torch.zeros_like(x)
 
     x = torch.randn(2, 10, 768)
     output = res(x, zero_sublayer)
@@ -64,7 +66,8 @@ def test_layer_norm_normalizes():
     res.eval()
 
     # Identity sublayer
-    identity = lambda x: torch.zeros_like(x)  # Zero to isolate layer norm effect
+    def identity(x):
+        return torch.zeros_like(x)  # Zero to isolate layer norm effect
 
     x = torch.randn(2, 10, 768) * 100  # Large values
 
@@ -87,7 +90,8 @@ def test_residual_with_linear_sublayer():
 
     # Simple linear transformation as sublayer
     linear = nn.Linear(64, 64)
-    sublayer = lambda x: linear(x)
+    def sublayer(x):
+        return linear(x)
 
     x = torch.randn(2, 5, 64)
     output = res(x, sublayer)
@@ -105,7 +109,8 @@ def test_residual_gradient_flow():
 
     # Simple sublayer with learnable parameters
     linear = nn.Linear(768, 768)
-    sublayer = lambda x: linear(x)
+    def sublayer(x):
+        return linear(x)
 
     x = torch.randn(2, 10, 768, requires_grad=True)
     output = res(x, sublayer)
@@ -127,7 +132,8 @@ def test_residual_direct_gradient_path():
     res = ResidualConnection(n_embd=64, dropout=0.0)
 
     # Identity sublayer (minimal transformation)
-    identity = lambda x: x * 0  # Zero output to test residual path
+    def identity(x):
+        return x * 0  # Zero output to test residual path
 
     x = torch.randn(2, 5, 64, requires_grad=True)
     output = res(x, identity)
@@ -145,7 +151,8 @@ def test_residual_dropout_training_vs_eval():
     res = ResidualConnection(n_embd=768, dropout=0.5)
 
     # Simple sublayer
-    sublayer = lambda x: x * 2
+    def sublayer(x):
+        return x * 2
 
     x = torch.randn(2, 10, 768)
 
@@ -167,7 +174,8 @@ def test_residual_no_dropout():
     res = ResidualConnection(n_embd=768, dropout=0.0)
     res.train()  # Even in train mode
 
-    sublayer = lambda x: x * 2
+    def sublayer(x):
+        return x * 2
 
     x = torch.randn(2, 10, 768)
     output1 = res(x, sublayer)
@@ -192,7 +200,8 @@ def test_residual_different_dimensions():
         res = ResidualConnection(n_embd=n_embd, dropout=0.0)
         res.eval()
 
-        sublayer = lambda x: x * 0.5
+        def sublayer(x):
+            return x * 0.5
 
         x = torch.randn(2, 5, n_embd)
         output = res(x, sublayer)
@@ -208,7 +217,8 @@ def test_residual_numerical_stability():
     # Large input values
     x = torch.randn(2, 10, 768) * 1000
 
-    sublayer = lambda x: x * 0.1
+    def sublayer(x):
+        return x * 0.1
 
     output = res(x, sublayer)
 
@@ -232,7 +242,7 @@ def test_residual_pre_norm_order():
     x = torch.randn(1, 5, 64) * 100  # Large values
 
     with torch.no_grad():
-        output = res(x, tracking_sublayer)
+        res(x, tracking_sublayer)
         expected_normalized = res.ln(x)
 
     # Sublayer should receive normalized input, not original
@@ -248,8 +258,10 @@ def test_residual_with_multiple_calls():
     res = ResidualConnection(n_embd=768, dropout=0.0)
     res.eval()
 
-    sublayer1 = lambda x: x * 0.5
-    sublayer2 = lambda x: x * 2.0
+    def sublayer1(x):
+        return x * 0.5
+    def sublayer2(x):
+        return x * 2.0
 
     x = torch.randn(2, 10, 768)
 

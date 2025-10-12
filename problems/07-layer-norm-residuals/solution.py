@@ -3,9 +3,10 @@
 This solution implements the pre-norm residual connection pattern used in GPT-2.
 """
 
+from collections.abc import Callable
+
 import torch.nn as nn
 from torch import Tensor
-from typing import Callable
 
 
 class ResidualConnection(nn.Module):

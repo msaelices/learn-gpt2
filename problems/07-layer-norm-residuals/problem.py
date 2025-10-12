@@ -9,9 +9,10 @@ Learning objectives:
 TODO: Implement the ResidualConnection class below.
 """
 
+from collections.abc import Callable
+
 import torch.nn as nn
 from torch import Tensor
-from typing import Callable
 
 
 class ResidualConnection(nn.Module):

@@ -1,11 +1,12 @@
 """Tests for Problem 10: Full GPT-2 Model Assembly."""
 
 import sys
+
 sys.path.append("../09-gpt2-config")
 
 import pytest
 import torch
-from solution import GPT2Model, GPT2Config
+from solution import GPT2Config, GPT2Model
 
 
 def test_model_initialization():

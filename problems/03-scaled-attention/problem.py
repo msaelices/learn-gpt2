@@ -8,7 +8,6 @@ Learning objectives:
 TODO: Complete the ScaledAttention class by adding the scaling factor.
 """
 
-import torch
 import torch.nn as nn
 from torch import Tensor
 
