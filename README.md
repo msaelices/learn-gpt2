@@ -348,6 +348,7 @@ This project is a learning resource and is not intended for production use.
 
 ## 🙏 Acknowledgments
 
+- Andrej Karpathy for his inspiring [YouTube channel](https://www.youtube.com/@andrejkarpathy) and "Neural Networks: Zero to Hero" course
 - OpenAI for GPT-2
 - HuggingFace for the transformers library
 - The PyTorch team
