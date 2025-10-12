@@ -99,11 +99,6 @@ The README contains:
 
 Edit `problem.py` and implement the TODOs:
 
-```bash
-# Open problem.py in your editor
-vim problem.py  # or code problem.py, nano problem.py, etc.
-```
-
 Tips:
 - Read all the hints in the docstrings
 - Start with the `__init__` method, then `forward`
