@@ -1,7 +1,7 @@
 [project]
-name = "gpt2"
+name = "learn-gpt2"
 version = "0.1.0"
-description = "A GPT-2 project"
+description = "A progressive learning path for implementing GPT-2 from scratch"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -22,31 +22,11 @@ dev = [
     "ruff>=0.6.0",
 ]
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-pythonpath = ["src"]
+testpaths = ["problems"]
 addopts = [
-    "--cov=gpt2",
-    "--cov-report=term-missing",
-    "--cov-report=html",
-]
-
-[tool.coverage.run]
-source = ["src"]
-omit = ["*/tests/*", "*/test_*.py"]
-
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if __name__ == .__main__.:",
-    "if TYPE_CHECKING:",
+    "-v",
 ]
 
 [tool.ruff]
@@ -69,5 +49,4 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**/*.py" = ["B018", "F841"]
-"problems/**/test_*.py" = ["F841"]
+"problems/**/test_*.py" = ["B018", "F841"]
