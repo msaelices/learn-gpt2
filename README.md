@@ -259,10 +259,6 @@ learn-gpt2/
 │   ├── 02-attention-basics/
 │   ├── ...
 │   └── 12-pretrained-loading/
-├── src/
-│   └── gpt2/
-│       └── model.py       # Reference implementation
-├── tests/                 # Tests for reference implementation
 ├── pyproject.toml         # Project dependencies
 └── README.md              # This file
 ```

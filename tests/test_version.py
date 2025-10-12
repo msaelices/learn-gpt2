@@ -1,7 +1,0 @@
-import gpt2
-
-
-def test_version() -> None:
-    """Test that version is defined."""
-    assert hasattr(gpt2, "__version__")
-    assert isinstance(gpt2.__version__, str)
