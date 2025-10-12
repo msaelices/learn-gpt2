@@ -4,6 +4,22 @@
 
 This specification outlines a comprehensive, problem-based learning curriculum for implementing GPT-2 from scratch. The curriculum is designed for developers who want to learn AI and LLMs with PyTorch through hands-on implementation.
 
+## Implementation Status
+
+**Completed Problems**: 4/12
+- ✅ Problem 1: Token & Position Embeddings (12 tests passing)
+- ✅ Problem 2: Attention Basics (13 tests passing)
+- ✅ Problem 3: Scaled Dot-Product Attention (15 tests passing)
+- ✅ Problem 4: Multi-Head Attention (14 tests passing)
+- ⏳ Problem 5: Causal Masking (pending)
+- ⏳ Problem 6: Feedforward Network (pending)
+- ⏳ Problem 7: Layer Normalization & Residuals (pending)
+- ⏳ Problem 8: Complete Transformer Block (pending)
+- ⏳ Problem 9: GPT-2 Configuration (pending)
+- ⏳ Problem 10: Full GPT-2 Model Assembly (pending)
+- ⏳ Problem 11: Weight Initialization (pending)
+- ⏳ Problem 12: Loading Pretrained Weights (pending)
+
 ## Goals
 
 1. **Progressive Learning**: Break down GPT-2 into digestible, sequential problems
@@ -46,9 +62,10 @@ learn-gpt2/
 
 ## Learning Path: 12 Progressive Problems
 
-### Problem 1: Token & Position Embeddings
+### Problem 1: Token & Position Embeddings ✅
 **Difficulty**: ⭐ Easy
 **Time estimate**: 30-45 minutes
+**Status**: Complete (12 tests passing)
 
 **Learning Objectives**:
 - Understand what embeddings are and why we need them
@@ -130,9 +147,10 @@ class Embeddings(nn.Module):
 
 ---
 
-### Problem 2: Attention Basics
+### Problem 2: Attention Basics ✅
 **Difficulty**: ⭐⭐ Medium
 **Time estimate**: 45-60 minutes
+**Status**: Complete (13 tests passing)
 
 **Learning Objectives**:
 - Understand the Query-Key-Value attention mechanism
@@ -171,9 +189,10 @@ class SimpleAttention(nn.Module):
 
 ---
 
-### Problem 3: Scaled Dot-Product Attention
+### Problem 3: Scaled Dot-Product Attention ✅
 **Difficulty**: ⭐⭐ Medium
 **Time estimate**: 30-45 minutes
+**Status**: Complete (15 tests passing)
 
 **Learning Objectives**:
 - Understand why scaling is necessary (numerical stability)
