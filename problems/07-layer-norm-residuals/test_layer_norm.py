@@ -10,8 +10,8 @@ def test_residual_initialization():
     """Test that ResidualConnection initializes without errors."""
     res = ResidualConnection(n_embd=768, dropout=0.1)
     assert res is not None
-    assert hasattr(res, 'ln')
-    assert hasattr(res, 'dropout')
+    assert hasattr(res, "ln")
+    assert hasattr(res, "dropout")
 
 
 def test_residual_layer_norm_exists():
@@ -90,6 +90,7 @@ def test_residual_with_linear_sublayer():
 
     # Simple linear transformation as sublayer
     linear = nn.Linear(64, 64)
+
     def sublayer(x):
         return linear(x)
 
@@ -109,6 +110,7 @@ def test_residual_gradient_flow():
 
     # Simple sublayer with learnable parameters
     linear = nn.Linear(768, 768)
+
     def sublayer(x):
         return linear(x)
 
@@ -260,6 +262,7 @@ def test_residual_with_multiple_calls():
 
     def sublayer1(x):
         return x * 0.5
+
     def sublayer2(x):
         return x * 2.0
 

@@ -26,7 +26,9 @@ gpt2_config = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(gpt2_config)
 GPT2Config = gpt2_config.GPT2Config
 
-spec = importlib.util.spec_from_file_location("gpt2_model", "../11-weight-initialization/solution.py")
+spec = importlib.util.spec_from_file_location(
+    "gpt2_model", "../11-weight-initialization/solution.py"
+)
 gpt2_model = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(gpt2_model)
 
@@ -44,7 +46,9 @@ class GPT2Model(nn.Module):
         self.config = config
 
         # Import TransformerBlock
-        spec = importlib.util.spec_from_file_location("transformer_block", "../08-transformer-block/solution.py")
+        spec = importlib.util.spec_from_file_location(
+            "transformer_block", "../08-transformer-block/solution.py"
+        )
         transformer_block = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(transformer_block)
         TransformerBlock = transformer_block.TransformerBlock

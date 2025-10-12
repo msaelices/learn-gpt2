@@ -42,8 +42,7 @@ class GPT2Config:
         """
         # Validate that n_embd is divisible by n_head
         # This ensures each head gets equal dimensions
-        assert n_embd % n_head == 0, \
-            f"n_embd ({n_embd}) must be divisible by n_head ({n_head})"
+        assert n_embd % n_head == 0, f"n_embd ({n_embd}) must be divisible by n_head ({n_head})"
 
         # Architecture parameters
         self.vocab_size = vocab_size

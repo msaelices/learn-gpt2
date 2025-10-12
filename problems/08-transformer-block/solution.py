@@ -51,9 +51,7 @@ class MultiHeadAttention(nn.Module):
         # Causal mask
         self.register_buffer(
             "bias",
-            torch.tril(torch.ones(n_positions, n_positions)).view(
-                1, 1, n_positions, n_positions
-            ),
+            torch.tril(torch.ones(n_positions, n_positions)).view(1, 1, n_positions, n_positions),
         )
 
     def forward(self, x: Tensor) -> Tensor:

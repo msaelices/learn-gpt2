@@ -35,20 +35,14 @@ def test_projection_dimensions():
     n_embd = 256
     attention = ScaledAttention(n_embd=n_embd)
 
-    assert (
-        attention.query.in_features == n_embd
-    ), f"Query input should be {n_embd}"
-    assert (
-        attention.query.out_features == n_embd
-    ), f"Query output should be {n_embd}"
+    assert attention.query.in_features == n_embd, f"Query input should be {n_embd}"
+    assert attention.query.out_features == n_embd, f"Query output should be {n_embd}"
 
     assert attention.key.in_features == n_embd, f"Key input should be {n_embd}"
     assert attention.key.out_features == n_embd, f"Key output should be {n_embd}"
 
     assert attention.value.in_features == n_embd, f"Value input should be {n_embd}"
-    assert (
-        attention.value.out_features == n_embd
-    ), f"Value output should be {n_embd}"
+    assert attention.value.out_features == n_embd, f"Value output should be {n_embd}"
 
 
 def test_forward_output_shape():
@@ -63,9 +57,7 @@ def test_forward_output_shape():
     output = attention(x)
 
     expected_shape = (batch_size, seq_len, n_embd)
-    assert (
-        output.shape == expected_shape
-    ), f"Expected shape {expected_shape}, got {output.shape}"
+    assert output.shape == expected_shape, f"Expected shape {expected_shape}, got {output.shape}"
 
 
 def test_different_sequence_lengths():
@@ -112,9 +104,9 @@ def test_attention_weights_sum_to_one():
 
         # Each row should sum to 1
         row_sums = attn_weights.sum(dim=-1)
-        assert torch.allclose(
-            row_sums, torch.ones_like(row_sums), atol=1e-6
-        ), "Attention weights should sum to 1 along last dimension"
+        assert torch.allclose(row_sums, torch.ones_like(row_sums), atol=1e-6), (
+            "Attention weights should sum to 1 along last dimension"
+        )
 
 
 def test_scaling_is_applied():
@@ -130,7 +122,7 @@ def test_scaling_is_applied():
         unscaled_scores = q @ k.transpose(-2, -1)
 
         # Expected scale factor
-        expected_scale = 256 ** -0.5  # 1/√256 = 1/16 = 0.0625
+        expected_scale = 256**-0.5  # 1/√256 = 1/16 = 0.0625
 
         # Compute what scaled scores should be
         unscaled_scores * expected_scale
@@ -145,9 +137,9 @@ def test_scaling_is_applied():
         # We can check by comparing variance or by checking if they match expected
         # Since we can't directly access intermediate values, we check the effect:
         # Scaled scores should have smaller magnitude than unscaled
-        assert (
-            actual_scores.abs().mean() > unscaled_scores.abs().mean() * expected_scale * 0.5
-        ), "Scaling doesn't appear to be applied (scores too large)"
+        assert actual_scores.abs().mean() > unscaled_scores.abs().mean() * expected_scale * 0.5, (
+            "Scaling doesn't appear to be applied (scores too large)"
+        )
 
 
 def test_scaling_for_different_dimensions():
@@ -170,9 +162,9 @@ def test_scaling_for_different_dimensions():
 
             # Allow some tolerance, but variance should be close to 1
             # Note: With random initialization, variance can vary quite a bit
-            assert (
-                0.05 < scaled_var < 20
-            ), f"Scaled variance should be ~1, got {scaled_var:.2f} for n_embd={n_embd}"
+            assert 0.05 < scaled_var < 20, (
+                f"Scaled variance should be ~1, got {scaled_var:.2f} for n_embd={n_embd}"
+            )
 
 
 def test_gradients_flow():
@@ -185,15 +177,9 @@ def test_gradients_flow():
     loss.backward()
 
     # Check that projections have gradients
-    assert (
-        attention.query.weight.grad is not None
-    ), "Query projection should have gradients"
-    assert (
-        attention.key.weight.grad is not None
-    ), "Key projection should have gradients"
-    assert (
-        attention.value.weight.grad is not None
-    ), "Value projection should have gradients"
+    assert attention.query.weight.grad is not None, "Query projection should have gradients"
+    assert attention.key.weight.grad is not None, "Key projection should have gradients"
+    assert attention.value.weight.grad is not None, "Value projection should have gradients"
 
     # Check that input has gradients
     assert x.grad is not None, "Input should have gradients"
@@ -229,9 +215,9 @@ def test_scaling_helps_with_large_dimensions():
         # Scaled attention should produce less extreme weights
         # (Though this might not always be true depending on the random values)
         # At minimum, they should be different
-        assert not torch.allclose(
-            unscaled_weights, scaled_weights
-        ), "Scaling should produce different attention weights"
+        assert not torch.allclose(unscaled_weights, scaled_weights), (
+            "Scaling should produce different attention weights"
+        )
 
 
 def test_different_inputs_produce_different_outputs():
@@ -246,9 +232,7 @@ def test_different_inputs_produce_different_outputs():
         output1 = attention(x1)
         output2 = attention(x2)
 
-    assert not torch.allclose(
-        output1, output2
-    ), "Different inputs should produce different outputs"
+    assert not torch.allclose(output1, output2), "Different inputs should produce different outputs"
 
 
 def test_output_is_reasonable():
@@ -280,9 +264,9 @@ def test_attention_matrix_shape():
         attn_scores = q @ k.transpose(-2, -1)
 
         expected_shape = (batch_size, seq_len, seq_len)
-        assert (
-            attn_scores.shape == expected_shape
-        ), f"Attention scores should have shape {expected_shape}"
+        assert attn_scores.shape == expected_shape, (
+            f"Attention scores should have shape {expected_shape}"
+        )
 
 
 def test_scale_factor_calculation():
@@ -295,7 +279,7 @@ def test_scale_factor_calculation():
             q = attention.query(x)
 
             # Expected scale factor
-            n_embd ** -0.5
+            n_embd**-0.5
 
             # We can verify the scale is correct by checking the variance
             # of scaled scores vs unscaled scores

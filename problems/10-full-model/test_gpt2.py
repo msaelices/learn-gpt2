@@ -82,9 +82,9 @@ def test_weight_tying():
     model = GPT2Model(config)
 
     # Check that weights are the same object (not just equal values)
-    assert (
-        model.lm_head.weight is model.wte.weight
-    ), "lm_head.weight should be tied with wte.weight (same object)"
+    assert model.lm_head.weight is model.wte.weight, (
+        "lm_head.weight should be tied with wte.weight (same object)"
+    )
 
     # Verify they have the same shape
     assert model.lm_head.weight.shape == model.wte.weight.shape
@@ -126,9 +126,9 @@ def test_forward_produces_different_outputs_for_different_inputs():
 
     # Unless inputs are identical, outputs should be different
     if not torch.equal(input_ids1, input_ids2):
-        assert not torch.allclose(
-            logits1, logits2, atol=1e-5
-        ), "Different inputs should produce different outputs"
+        assert not torch.allclose(logits1, logits2, atol=1e-5), (
+            "Different inputs should produce different outputs"
+        )
 
 
 def test_gradient_flow():
@@ -149,7 +149,9 @@ def test_gradient_flow():
 
     # Check that transformer blocks have gradients
     for i, block in enumerate(model.h):
-        assert block.attn.c_attn.weight.grad is not None, f"Block {i} attention should have gradients"
+        assert block.attn.c_attn.weight.grad is not None, (
+            f"Block {i} attention should have gradients"
+        )
         assert block.mlp.c_fc.weight.grad is not None, f"Block {i} FFN should have gradients"
 
 
@@ -227,9 +229,7 @@ def test_model_deterministic_in_eval_mode():
         logits1 = model(input_ids)
         logits2 = model(input_ids)
 
-    assert torch.allclose(
-        logits1, logits2, atol=1e-6
-    ), "Model should be deterministic in eval mode"
+    assert torch.allclose(logits1, logits2, atol=1e-6), "Model should be deterministic in eval mode"
 
 
 def test_transformer_blocks_sequential():

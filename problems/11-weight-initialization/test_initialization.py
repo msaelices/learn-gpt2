@@ -256,7 +256,9 @@ def test_different_seeds_produce_different_weights():
     weights2 = model2.h[0].attn.c_attn.weight.clone()
 
     # Weights should be different
-    assert not torch.allclose(weights1, weights2), "Different seeds should produce different weights"
+    assert not torch.allclose(weights1, weights2), (
+        "Different seeds should produce different weights"
+    )
 
 
 def test_same_seed_produces_same_weights():

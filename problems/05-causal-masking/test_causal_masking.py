@@ -20,8 +20,8 @@ def test_causal_mask_registered():
     attn = CausalMultiHeadAttention(n_embd=768, n_head=12, n_positions=1024)
 
     # Check that bias buffer exists
-    assert hasattr(attn, 'bias')
-    assert 'bias' in dict(attn.named_buffers())
+    assert hasattr(attn, "bias")
+    assert "bias" in dict(attn.named_buffers())
 
     # Check mask shape
     assert attn.bias.shape == (1, 1, 1024, 1024)
@@ -74,7 +74,7 @@ def test_causal_attention_pattern():
             k = k.view(batch_size, seq_len, self.n_head, self.head_dim).transpose(1, 2)
             v = v.view(batch_size, seq_len, self.n_head, self.head_dim).transpose(1, 2)
 
-            attn_scores = (q @ k.transpose(-2, -1)) / (self.head_dim ** 0.5)
+            attn_scores = (q @ k.transpose(-2, -1)) / (self.head_dim**0.5)
             attn_scores = attn_scores.masked_fill(
                 self.bias[:, :, :seq_len, :seq_len] == 0, float("-inf")
             )
@@ -86,7 +86,9 @@ def test_causal_attention_pattern():
 
             return out, attn_weights
 
-    attn_with_weights = CausalAttnWithWeights(n_embd=n_embd, n_head=n_head, n_positions=10, dropout=0.0)
+    attn_with_weights = CausalAttnWithWeights(
+        n_embd=n_embd, n_head=n_head, n_positions=10, dropout=0.0
+    )
     attn_with_weights.load_state_dict(attn.state_dict())
     attn_with_weights.eval()
 
@@ -101,8 +103,9 @@ def test_causal_attention_pattern():
         for i in range(seq_len):
             for j in range(i + 1, seq_len):
                 # Position i should not attend to position j when j > i
-                assert attn_weights[0, head, i, j] == 0, \
+                assert attn_weights[0, head, i, j] == 0, (
                     f"Head {head}: Position {i} should not attend to future position {j}"
+                )
 
 
 def test_attention_weights_sum_to_one():
@@ -122,7 +125,7 @@ def test_attention_weights_sum_to_one():
             k = k.view(batch_size, seq_len, self.n_head, self.head_dim).transpose(1, 2)
             v = v.view(batch_size, seq_len, self.n_head, self.head_dim).transpose(1, 2)
 
-            attn_scores = (q @ k.transpose(-2, -1)) / (self.head_dim ** 0.5)
+            attn_scores = (q @ k.transpose(-2, -1)) / (self.head_dim**0.5)
             attn_scores = attn_scores.masked_fill(
                 self.bias[:, :, :seq_len, :seq_len] == 0, float("-inf")
             )
@@ -134,7 +137,9 @@ def test_attention_weights_sum_to_one():
 
             return out, attn_weights
 
-    attn_with_weights = CausalAttnWithWeights(n_embd=n_embd, n_head=n_head, n_positions=10, dropout=0.0)
+    attn_with_weights = CausalAttnWithWeights(
+        n_embd=n_embd, n_head=n_head, n_positions=10, dropout=0.0
+    )
     attn_with_weights.load_state_dict(attn.state_dict())
     attn_with_weights.eval()
 
@@ -167,16 +172,16 @@ def test_mask_device_consistency():
     attn = CausalMultiHeadAttention(n_embd=768, n_head=12)
 
     # Check initial device
-    assert attn.bias.device.type == 'cpu'
+    assert attn.bias.device.type == "cpu"
 
     # Move to CPU explicitly (should work)
-    attn.to('cpu')
-    assert attn.bias.device.type == 'cpu'
+    attn.to("cpu")
+    assert attn.bias.device.type == "cpu"
 
     # If CUDA available, test GPU
     if torch.cuda.is_available():
-        attn.to('cuda')
-        assert attn.bias.device.type == 'cuda'
+        attn.to("cuda")
+        assert attn.bias.device.type == "cuda"
 
 
 def test_gradient_flow():
@@ -211,7 +216,7 @@ def test_first_position_only_self_attention():
             k = k.view(batch_size, seq_len, self.n_head, self.head_dim).transpose(1, 2)
             v = v.view(batch_size, seq_len, self.n_head, self.head_dim).transpose(1, 2)
 
-            attn_scores = (q @ k.transpose(-2, -1)) / (self.head_dim ** 0.5)
+            attn_scores = (q @ k.transpose(-2, -1)) / (self.head_dim**0.5)
             attn_scores = attn_scores.masked_fill(
                 self.bias[:, :, :seq_len, :seq_len] == 0, float("-inf")
             )
@@ -256,7 +261,7 @@ def test_last_position_attends_to_all():
             k = k.view(batch_size, seq_len, self.n_head, self.head_dim).transpose(1, 2)
             v = v.view(batch_size, seq_len, self.n_head, self.head_dim).transpose(1, 2)
 
-            attn_scores = (q @ k.transpose(-2, -1)) / (self.head_dim ** 0.5)
+            attn_scores = (q @ k.transpose(-2, -1)) / (self.head_dim**0.5)
             attn_scores = attn_scores.masked_fill(
                 self.bias[:, :, :seq_len, :seq_len] == 0, float("-inf")
             )

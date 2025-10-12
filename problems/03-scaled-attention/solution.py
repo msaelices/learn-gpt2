@@ -133,6 +133,8 @@ if __name__ == "__main__":
         # Attention weights
         attn_weights = torch.softmax(scaled_scores, dim=-1)
         print(f"\nAttention weights shape: {attn_weights.shape}")
-        print(f"Sum of attention weights (should be ~1.0): {attn_weights[0, 0, :].sum().item():.6f}")
+        print(
+            f"Sum of attention weights (should be ~1.0): {attn_weights[0, 0, :].sum().item():.6f}"
+        )
 
     print("\n✅ Scaled attention working correctly!")

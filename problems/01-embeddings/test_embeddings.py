@@ -11,9 +11,7 @@ from problem import Embeddings
 
 def test_initialization():
     """Test that Embeddings module initializes without errors."""
-    embeddings = Embeddings(
-        vocab_size=50257, n_positions=1024, n_embd=768, embd_pdrop=0.1
-    )
+    embeddings = Embeddings(vocab_size=50257, n_positions=1024, n_embd=768, embd_pdrop=0.1)
     assert embeddings is not None
     assert isinstance(embeddings, nn.Module)
 
@@ -24,15 +22,11 @@ def test_has_required_layers():
 
     # Check for token embedding layer
     assert hasattr(embeddings, "wte"), "Missing token embedding layer (wte)"
-    assert isinstance(
-        embeddings.wte, nn.Embedding
-    ), "wte should be an nn.Embedding layer"
+    assert isinstance(embeddings.wte, nn.Embedding), "wte should be an nn.Embedding layer"
 
     # Check for position embedding layer
     assert hasattr(embeddings, "wpe"), "Missing position embedding layer (wpe)"
-    assert isinstance(
-        embeddings.wpe, nn.Embedding
-    ), "wpe should be an nn.Embedding layer"
+    assert isinstance(embeddings.wpe, nn.Embedding), "wpe should be an nn.Embedding layer"
 
     # Check for dropout layer
     assert hasattr(embeddings, "drop"), "Missing dropout layer (drop)"
@@ -45,25 +39,21 @@ def test_embedding_dimensions():
     n_positions = 512
     n_embd = 256
 
-    embeddings = Embeddings(
-        vocab_size=vocab_size, n_positions=n_positions, n_embd=n_embd
-    )
+    embeddings = Embeddings(vocab_size=vocab_size, n_positions=n_positions, n_embd=n_embd)
 
     # Check token embedding dimensions
-    assert (
-        embeddings.wte.num_embeddings == vocab_size
-    ), f"Token embedding should have {vocab_size} embeddings"
-    assert (
-        embeddings.wte.embedding_dim == n_embd
-    ), f"Token embedding dimension should be {n_embd}"
+    assert embeddings.wte.num_embeddings == vocab_size, (
+        f"Token embedding should have {vocab_size} embeddings"
+    )
+    assert embeddings.wte.embedding_dim == n_embd, f"Token embedding dimension should be {n_embd}"
 
     # Check position embedding dimensions
-    assert (
-        embeddings.wpe.num_embeddings == n_positions
-    ), f"Position embedding should have {n_positions} embeddings"
-    assert (
-        embeddings.wpe.embedding_dim == n_embd
-    ), f"Position embedding dimension should be {n_embd}"
+    assert embeddings.wpe.num_embeddings == n_positions, (
+        f"Position embedding should have {n_positions} embeddings"
+    )
+    assert embeddings.wpe.embedding_dim == n_embd, (
+        f"Position embedding dimension should be {n_embd}"
+    )
 
 
 def test_forward_output_shape():
@@ -82,9 +72,7 @@ def test_forward_output_shape():
 
     # Check output shape
     expected_shape = (batch_size, seq_len, n_embd)
-    assert (
-        output.shape == expected_shape
-    ), f"Expected shape {expected_shape}, got {output.shape}"
+    assert output.shape == expected_shape, f"Expected shape {expected_shape}, got {output.shape}"
 
 
 def test_different_sequence_lengths():
@@ -129,9 +117,9 @@ def test_different_tokens_produce_different_embeddings():
         output_2 = embeddings(input_ids_2)
 
     # Outputs should be different
-    assert not torch.allclose(
-        output_1, output_2
-    ), "Different inputs should produce different embeddings"
+    assert not torch.allclose(output_1, output_2), (
+        "Different inputs should produce different embeddings"
+    )
 
 
 def test_position_information_added():
@@ -147,9 +135,9 @@ def test_position_information_added():
 
     # Each position should have a different embedding (due to position embeddings)
     for i in range(4):
-        assert not torch.allclose(
-            output[0, i], output[0, i + 1]
-        ), f"Position {i} and {i+1} should have different embeddings"
+        assert not torch.allclose(output[0, i], output[0, i + 1]), (
+            f"Position {i} and {i + 1} should have different embeddings"
+        )
 
 
 def test_dropout_behavior():
@@ -165,9 +153,7 @@ def test_dropout_behavior():
         outputs_train.append(output.clone())
 
     # At least some outputs should be different (due to dropout randomness)
-    all_same = all(
-        torch.allclose(outputs_train[0], out, atol=1e-6) for out in outputs_train[1:]
-    )
+    all_same = all(torch.allclose(outputs_train[0], out, atol=1e-6) for out in outputs_train[1:])
     assert not all_same, "Dropout should cause variation in training mode"
 
     # Eval mode: outputs should be identical
@@ -176,9 +162,9 @@ def test_dropout_behavior():
         output_eval_1 = embeddings(input_ids)
         output_eval_2 = embeddings(input_ids)
 
-    assert torch.allclose(
-        output_eval_1, output_eval_2, atol=1e-6
-    ), "Outputs should be identical in eval mode (no dropout)"
+    assert torch.allclose(output_eval_1, output_eval_2, atol=1e-6), (
+        "Outputs should be identical in eval mode (no dropout)"
+    )
 
 
 def test_device_compatibility():
@@ -219,12 +205,8 @@ def test_gradients_flow():
     loss.backward()
 
     # Check that embedding layers have gradients
-    assert (
-        embeddings.wte.weight.grad is not None
-    ), "Token embeddings should have gradients"
-    assert (
-        embeddings.wpe.weight.grad is not None
-    ), "Position embeddings should have gradients"
+    assert embeddings.wte.weight.grad is not None, "Token embeddings should have gradients"
+    assert embeddings.wpe.weight.grad is not None, "Position embeddings should have gradients"
 
 
 if __name__ == "__main__":

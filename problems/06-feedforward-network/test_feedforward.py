@@ -50,7 +50,7 @@ def test_gelu_known_values():
 def test_gelu_comparison_with_pytorch():
     """Test that our GELU is close to PyTorch's GELU."""
     our_gelu = NewGELU()
-    pytorch_gelu = nn.GELU(approximate='tanh')  # PyTorch's tanh approximation
+    pytorch_gelu = nn.GELU(approximate="tanh")  # PyTorch's tanh approximation
 
     x = torch.randn(100)
 
@@ -75,10 +75,10 @@ def test_feedforward_initialization():
     """Test that FeedForward initializes without errors."""
     ff = FeedForward(n_embd=768, n_inner=3072, dropout=0.1)
     assert ff is not None
-    assert hasattr(ff, 'c_fc')
-    assert hasattr(ff, 'c_proj')
-    assert hasattr(ff, 'act')
-    assert hasattr(ff, 'dropout')
+    assert hasattr(ff, "c_fc")
+    assert hasattr(ff, "c_proj")
+    assert hasattr(ff, "act")
+    assert hasattr(ff, "dropout")
 
 
 def test_feedforward_layer_dimensions():
@@ -113,10 +113,10 @@ def test_feedforward_forward_shape():
 def test_feedforward_different_sizes():
     """Test FeedForward with different embedding dimensions."""
     configs = [
-        (64, 256),    # Small
+        (64, 256),  # Small
         (768, 3072),  # GPT-2 small
-        (1024, 4096), # GPT-2 medium
-        (1280, 5120), # GPT-2 large
+        (1024, 4096),  # GPT-2 medium
+        (1280, 5120),  # GPT-2 large
     ]
 
     for n_embd, n_inner in configs:
@@ -234,7 +234,7 @@ def test_feedforward_position_wise():
     # Process each position independently
     outputs_separate = []
     for i in range(seq_len):
-        pos_input = x[:, i:i+1, :]  # Single position
+        pos_input = x[:, i : i + 1, :]  # Single position
         pos_output = ff(pos_input)
         outputs_separate.append(pos_output)
 

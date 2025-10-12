@@ -20,7 +20,9 @@ gpt2_config = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(gpt2_config)
 GPT2Config = gpt2_config.GPT2Config
 
-spec = importlib.util.spec_from_file_location("transformer_block", "../08-transformer-block/solution.py")
+spec = importlib.util.spec_from_file_location(
+    "transformer_block", "../08-transformer-block/solution.py"
+)
 transformer_block = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(transformer_block)
 TransformerBlock = transformer_block.TransformerBlock
@@ -183,8 +185,8 @@ class GPT2Model(nn.Module):
 
         for hf_key, hf_param in hf_state_dict.items():
             # HuggingFace keys have 'transformer.' prefix, we don't
-            if hf_key.startswith('transformer.'):
-                our_key = hf_key[len('transformer.'):]
+            if hf_key.startswith("transformer."):
+                our_key = hf_key[len("transformer.") :]
             else:
                 # Skip lm_head, it's tied with wte
                 continue
@@ -194,7 +196,9 @@ class GPT2Model(nn.Module):
             # PyTorch Linear weights have shape (out_features, in_features)
             # We need to transpose!
 
-            if 'weight' in our_key and any(name in our_key for name in ['c_attn', 'c_proj', 'c_fc']):
+            if "weight" in our_key and any(
+                name in our_key for name in ["c_attn", "c_proj", "c_fc"]
+            ):
                 # These are Conv1D layers in HuggingFace - transpose!
                 our_state_dict[our_key] = hf_param.t().contiguous()
             else:
@@ -208,8 +212,8 @@ class GPT2Model(nn.Module):
         missing_keys, unexpected_keys = model.load_state_dict(our_state_dict, strict=False)
 
         # Filter out expected missing keys
-        expected_missing = ['lm_head.weight']  # Tied with wte
-        expected_missing += [f'h.{i}.attn.bias' for i in range(config.n_layer)]  # Buffers
+        expected_missing = ["lm_head.weight"]  # Tied with wte
+        expected_missing += [f"h.{i}.attn.bias" for i in range(config.n_layer)]  # Buffers
 
         unexpected_missing = [k for k in missing_keys if k not in expected_missing]
 

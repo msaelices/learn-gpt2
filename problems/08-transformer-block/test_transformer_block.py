@@ -14,10 +14,10 @@ def test_transformer_block_initialization():
         n_positions=1024,
     )
     assert block is not None
-    assert hasattr(block, 'ln_1')
-    assert hasattr(block, 'attn')
-    assert hasattr(block, 'ln_2')
-    assert hasattr(block, 'mlp')
+    assert hasattr(block, "ln_1")
+    assert hasattr(block, "attn")
+    assert hasattr(block, "ln_2")
+    assert hasattr(block, "mlp")
 
 
 def test_transformer_block_components():
@@ -35,8 +35,8 @@ def test_transformer_block_components():
     assert block.ln_2.normalized_shape == (768,)
 
     # Check attention and MLP
-    assert hasattr(block.attn, 'c_attn')  # MultiHeadAttention
-    assert hasattr(block.mlp, 'c_fc')     # FeedForward
+    assert hasattr(block.attn, "c_attn")  # MultiHeadAttention
+    assert hasattr(block.mlp, "c_fc")  # FeedForward
 
 
 def test_transformer_block_forward_shape():
@@ -59,10 +59,10 @@ def test_transformer_block_forward_shape():
 def test_transformer_block_different_configs():
     """Test TransformerBlock with different configurations."""
     configs = [
-        (64, 4, 128),       # Small
-        (768, 12, 1024),    # GPT-2 small
-        (1024, 16, 1024),   # GPT-2 medium
-        (1280, 20, 1024),   # GPT-2 large
+        (64, 4, 128),  # Small
+        (768, 12, 1024),  # GPT-2 small
+        (1024, 16, 1024),  # GPT-2 medium
+        (1280, 20, 1024),  # GPT-2 large
     ]
 
     for n_embd, n_head, n_positions in configs:
@@ -337,8 +337,9 @@ def test_transformer_block_parameter_count():
     # - Attention: 3 * n_embd * n_embd (QKV) + n_embd * n_embd (proj) + biases
     # - FFN: n_embd * 4*n_embd + 4*n_embd * n_embd + biases
     # - LayerNorm: 2 * (n_embd + n_embd) for weights and biases
-    expected_approx = (3 * n_embd * n_embd) + (n_embd * n_embd) + \
-                      (n_embd * 4 * n_embd) + (4 * n_embd * n_embd)
+    expected_approx = (
+        (3 * n_embd * n_embd) + (n_embd * n_embd) + (n_embd * 4 * n_embd) + (4 * n_embd * n_embd)
+    )
 
     # Should be within reasonable range (allow for biases and layer norms)
     assert total_params > expected_approx * 0.9

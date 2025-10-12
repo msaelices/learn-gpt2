@@ -20,7 +20,9 @@ class CausalMultiHeadAttention(nn.Module):
     which is essential for autoregressive language modeling (like GPT-2).
     """
 
-    def __init__(self, n_embd: int, n_head: int, n_positions: int = 1024, dropout: float = 0.1) -> None:
+    def __init__(
+        self, n_embd: int, n_head: int, n_positions: int = 1024, dropout: float = 0.1
+    ) -> None:
         """Initialize causal multi-head attention.
 
         Args:

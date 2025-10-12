@@ -35,20 +35,14 @@ def test_projection_dimensions():
     n_embd = 256
     attention = SimpleAttention(n_embd=n_embd)
 
-    assert (
-        attention.query.in_features == n_embd
-    ), f"Query input should be {n_embd}"
-    assert (
-        attention.query.out_features == n_embd
-    ), f"Query output should be {n_embd}"
+    assert attention.query.in_features == n_embd, f"Query input should be {n_embd}"
+    assert attention.query.out_features == n_embd, f"Query output should be {n_embd}"
 
     assert attention.key.in_features == n_embd, f"Key input should be {n_embd}"
     assert attention.key.out_features == n_embd, f"Key output should be {n_embd}"
 
     assert attention.value.in_features == n_embd, f"Value input should be {n_embd}"
-    assert (
-        attention.value.out_features == n_embd
-    ), f"Value output should be {n_embd}"
+    assert attention.value.out_features == n_embd, f"Value output should be {n_embd}"
 
 
 def test_forward_output_shape():
@@ -63,9 +57,7 @@ def test_forward_output_shape():
     output = attention(x)
 
     expected_shape = (batch_size, seq_len, n_embd)
-    assert (
-        output.shape == expected_shape
-    ), f"Expected shape {expected_shape}, got {output.shape}"
+    assert output.shape == expected_shape, f"Expected shape {expected_shape}, got {output.shape}"
 
 
 def test_different_sequence_lengths():
@@ -111,9 +103,9 @@ def test_attention_weights_sum_to_one():
 
         # Each row should sum to 1
         row_sums = attn_weights.sum(dim=-1)
-        assert torch.allclose(
-            row_sums, torch.ones_like(row_sums), atol=1e-6
-        ), "Attention weights should sum to 1 along last dimension"
+        assert torch.allclose(row_sums, torch.ones_like(row_sums), atol=1e-6), (
+            "Attention weights should sum to 1 along last dimension"
+        )
 
 
 def test_output_is_weighted_combination():
@@ -144,9 +136,7 @@ def test_different_inputs_produce_different_outputs():
         output1 = attention(x1)
         output2 = attention(x2)
 
-    assert not torch.allclose(
-        output1, output2
-    ), "Different inputs should produce different outputs"
+    assert not torch.allclose(output1, output2), "Different inputs should produce different outputs"
 
 
 def test_attention_is_permutation_sensitive():
@@ -164,9 +154,9 @@ def test_attention_is_permutation_sensitive():
 
     # Outputs should generally be different
     # (They could accidentally be similar, but very unlikely)
-    assert not torch.allclose(
-        output, output_permuted, atol=1e-3
-    ), "Attention should be sensitive to input order"
+    assert not torch.allclose(output, output_permuted, atol=1e-3), (
+        "Attention should be sensitive to input order"
+    )
 
 
 def test_gradients_flow():
@@ -179,15 +169,9 @@ def test_gradients_flow():
     loss.backward()
 
     # Check that projections have gradients
-    assert (
-        attention.query.weight.grad is not None
-    ), "Query projection should have gradients"
-    assert (
-        attention.key.weight.grad is not None
-    ), "Key projection should have gradients"
-    assert (
-        attention.value.weight.grad is not None
-    ), "Value projection should have gradients"
+    assert attention.query.weight.grad is not None, "Query projection should have gradients"
+    assert attention.key.weight.grad is not None, "Key projection should have gradients"
+    assert attention.value.weight.grad is not None, "Value projection should have gradients"
 
     # Check that input has gradients
     assert x.grad is not None, "Input should have gradients"
@@ -223,9 +207,9 @@ def test_attention_matrix_shape():
         attn_scores = q @ k.transpose(-2, -1)
 
         expected_shape = (batch_size, seq_len, seq_len)
-        assert (
-            attn_scores.shape == expected_shape
-        ), f"Attention scores should have shape {expected_shape}"
+        assert attn_scores.shape == expected_shape, (
+            f"Attention scores should have shape {expected_shape}"
+        )
 
 
 if __name__ == "__main__":
