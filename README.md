@@ -26,10 +26,10 @@ The curriculum consists of 12 progressive problems:
 | 6 | [Feedforward Network](problems/06-feedforward-network/) | ⭐ Easy | ✅ Complete |
 | 7 | [Layer Normalization & Residuals](problems/07-layer-norm-residuals/) | ⭐⭐ Medium | ✅ Complete |
 | 8 | [Complete Transformer Block](problems/08-transformer-block/) | ⭐⭐⭐ Hard | ✅ Complete |
-| 9 | [GPT-2 Configuration](problems/09-gpt2-config/) | ⭐ Easy | 🔲 Pending |
-| 10 | [Full GPT-2 Model Assembly](problems/10-full-model/) | ⭐⭐⭐ Hard | 🔲 Pending |
-| 11 | [Weight Initialization](problems/11-weight-initialization/) | ⭐⭐ Medium | 🔲 Pending |
-| 12 | [Loading Pretrained Weights](problems/12-pretrained-loading/) | ⭐⭐⭐⭐ Very Hard | 🔲 Pending |
+| 9 | [GPT-2 Configuration](problems/09-gpt2-config/) | ⭐ Easy | ✅ Complete |
+| 10 | [Full GPT-2 Model Assembly](problems/10-full-model/) | ⭐⭐⭐ Hard | ✅ Complete |
+| 11 | [Weight Initialization](problems/11-weight-initialization/) | ⭐⭐ Medium | ✅ Complete |
+| 12 | [Loading Pretrained Weights](problems/12-pretrained-loading/) | ⭐⭐⭐⭐ Very Hard | ✅ Complete |
 
 **Progress: 8/12 problems complete (67%)**
 
