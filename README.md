@@ -31,8 +31,6 @@ The curriculum consists of 12 progressive problems:
 | 11 | [Weight Initialization](problems/11-weight-initialization/) | ⭐⭐ Medium | ✅ Complete |
 | 12 | [Loading Pretrained Weights](problems/12-pretrained-loading/) | ⭐⭐⭐⭐ Very Hard | ✅ Complete |
 
-**Progress: 8/12 problems complete (67%)**
-
 ## 🚀 Quick Start
 
 ### Prerequisites
