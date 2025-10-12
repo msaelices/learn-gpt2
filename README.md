@@ -321,6 +321,7 @@ Then restart your terminal.
 - [The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) - Visual guide
 - [The Annotated Transformer](http://nlp.seas.harvard.edu/2018/04/03/attention.html) - Line-by-line implementation
 - [The Annotated GPT-2](https://amaarora.github.io/posts/2020-02-18-annotatedGPT2.html) - GPT-2 walkthrough
+- [Let's reproduce GPT-2](https://www.youtube.com/watch?v=l8pRSuU81PU) - Andrej Karpathy's video tutorial
 
 ### Documentation
 - [PyTorch Documentation](https://pytorch.org/docs/stable/index.html)
