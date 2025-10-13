@@ -32,6 +32,26 @@ Position 1 → [0.3, -0.2, 0.4, ...]
 
 GPT-2 uses a simple approach: add token embeddings and position embeddings element-wise. This gives the model information about both what the token is AND where it appears in the sequence.
 
+### Dropout in Embeddings
+
+After combining the embeddings, we apply dropout - a crucial regularization technique. Here's why it matters:
+
+**What is Dropout?**
+Dropout randomly sets a fraction of embedding values to zero during training (typically 10% in GPT-2). For example, if an embedding is `[0.5, 0.3, -0.2, 0.8]`, dropout might convert it to `[0.5, 0.0, -0.2, 0.8]`.
+
+**Why Apply Dropout to Embeddings?**
+1. **Prevents Overfitting**: Without dropout, the model might memorize specific embedding patterns from the training data
+2. **Encourages Robustness**: By randomly dropping dimensions, the model can't rely on any single feature and must learn more distributed representations
+3. **Reduces Co-adaptation**: Forces the model to learn redundant representations across multiple dimensions
+4. **Better Generalization**: Models with embedding dropout typically perform better on unseen data
+
+**Training vs. Evaluation**
+- During training: Dropout is active, randomly zeroing elements with probability `embd_pdrop` (0.1 for GPT-2)
+- During evaluation: Dropout is automatically disabled, passing embeddings through unchanged
+- PyTorch handles this automatically via `model.train()` and `model.eval()`
+
+**Important Note**: The dropout layer scales the remaining values by `1/(1-p)` during training to maintain the expected sum. For example, with 10% dropout, remaining values are scaled by ~1.11x. This ensures consistent activation magnitudes between training and inference.
+
 ## Your Task
 
 Implement an embedding layer that:
@@ -116,7 +136,7 @@ Example:
 - **Vocabulary size**: Number of unique tokens (e.g., 50,257 for GPT-2)
 - **Embedding dimension**: Size of the dense vector (e.g., 768 for GPT-2 small)
 - **Max positions**: Maximum sequence length supported (e.g., 1024 for GPT-2)
-- **Dropout**: Regularization technique that randomly zeros some elements during training
+- **Dropout**: Regularization technique that randomly zeros elements during training to prevent overfitting. Applied to embeddings with probability 0.1 (10%) in GPT-2. Includes automatic scaling to maintain expected values.
 - **Device placement**: Ensuring tensors are on the same device (CPU/GPU)
 
 ## Next Steps

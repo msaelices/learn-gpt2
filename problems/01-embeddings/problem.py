@@ -44,7 +44,7 @@ class Embeddings(nn.Module):
             - Use nn.Embedding(num_embeddings, embedding_dim) for both token and position embeddings
             - Token embeddings: vocab_size → n_embd
             - Position embeddings: n_positions → n_embd
-            - Use nn.Dropout for regularization
+            - Use nn.Dropout for regularization (prevents overfitting by randomly zeroing elements during training)
         """
         super().__init__()
 
@@ -59,7 +59,10 @@ class Embeddings(nn.Module):
         raise NotImplementedError("Create position embedding layer (wpe)")
 
         # TODO: Create dropout layer
-        # Hint: self.drop = nn.Dropout(...)
+        # Dropout is a regularization technique that randomly zeros some elements
+        # during training to prevent overfitting. It's applied to the combined embeddings
+        # before they enter the transformer blocks.
+        # Hint: Use nn.Dropout with the embd_pdrop parameter
         raise NotImplementedError("Create dropout layer")
 
     def forward(self, input_ids: Tensor) -> Tensor:
@@ -110,6 +113,9 @@ class Embeddings(nn.Module):
         raise NotImplementedError("Combine embeddings")
 
         # TODO: Apply dropout
+        # Dropout helps prevent overfitting by randomly zeroing ~10% of embedding values
+        # during training. This forces the model to be more robust and not rely too heavily
+        # on specific embedding dimensions. During evaluation, dropout is automatically disabled.
         # Hint: Remember self.drop defined before
         raise NotImplementedError("Apply dropout")
 
