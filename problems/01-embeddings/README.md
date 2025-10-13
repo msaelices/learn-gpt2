@@ -20,6 +20,16 @@ Token embeddings map each vocabulary item (token) to a learned vector representa
 
 Think of it as a lookup table: token ID 42 → [0.1, -0.3, 0.5, ..., 0.2] (768 numbers)
 
+**Why Dense Vectors?**
+Neural networks can't process discrete symbols (words/tokens) directly. Embeddings convert these discrete symbols into continuous vectors that:
+- Capture semantic relationships (similar words have similar vectors)
+- Can be learned through backpropagation during training
+- Reduce dimensionality compared to one-hot encoding (768 dimensions vs 50,257)
+- Enable mathematical operations like addition and similarity computation
+
+**Learned vs Fixed**
+Unlike older methods (e.g., Word2Vec), GPT-2's token embeddings are learned end-to-end as part of model training. They start random and gradually learn to represent tokens in ways useful for language modeling.
+
 ### Position Embeddings
 
 Unlike RNNs, transformers don't have an inherent sense of position or order. Position embeddings solve this by learning a unique vector for each position in the sequence.
@@ -28,9 +38,55 @@ Position 0 → [0.2, 0.1, -0.1, ...]
 Position 1 → [0.3, -0.2, 0.4, ...]
 ...and so on
 
+**Why Are Position Embeddings Necessary?**
+Without position information, the transformer would treat "dog bites man" identically to "man bites dog" - the attention mechanism is inherently permutation-invariant. Position embeddings inject crucial word order information.
+
+**GPT-2's Approach**
+GPT-2 uses *learned* position embeddings rather than sinusoidal (fixed) encodings used in the original Transformer:
+- Each position (0 to 1023) gets its own learnable vector
+- These are trained alongside the model, allowing them to adapt to the specific task
+- They're completely separate from token embeddings - position 0 has the same embedding regardless of which token appears there
+- Maximum sequence length is fixed at training time (1024 for GPT-2)
+
 ### Combining Embeddings
 
 GPT-2 uses a simple approach: add token embeddings and position embeddings element-wise. This gives the model information about both what the token is AND where it appears in the sequence.
+
+**Why Addition?**
+You might wonder why we add rather than concatenate. Addition has several advantages:
+- **Preserves dimensionality**: Output has the same dimension (768) as input, keeping the model architecture clean
+- **Efficient**: No additional parameters needed for projection after concatenation
+- **Effective**: Despite being simple, addition allows the model to learn how position modifies meaning
+- **Mathematically flexible**: The subsequent transformer layers can learn to separate or combine these signals as needed
+
+For example:
+```
+Token "cat" embedding:     [0.5, -0.3, 0.8, ...]
+Position 2 embedding:      [0.1,  0.2, -0.1, ...]
+Combined embedding:        [0.6, -0.1, 0.7, ...]  # Element-wise sum
+```
+
+The resulting vector represents "cat at position 2" in a single unified representation.
+
+### Dropout in Embeddings
+
+After combining the embeddings, we apply dropout - a crucial regularization technique. Here's why it matters:
+
+**What is Dropout?**
+Dropout randomly sets a fraction of embedding values to zero during training (typically 10% in GPT-2). For example, if an embedding is `[0.5, 0.3, -0.2, 0.8]`, dropout might convert it to `[0.5, 0.0, -0.2, 0.8]`.
+
+**Why Apply Dropout to Embeddings?**
+1. **Prevents Overfitting**: Without dropout, the model might memorize specific embedding patterns from the training data
+2. **Encourages Robustness**: By randomly dropping dimensions, the model can't rely on any single feature and must learn more distributed representations
+3. **Reduces Co-adaptation**: Forces the model to learn redundant representations across multiple dimensions
+4. **Better Generalization**: Models with embedding dropout typically perform better on unseen data
+
+**Training vs. Evaluation**
+- During training: Dropout is active, randomly zeroing elements with probability `embd_pdrop` (0.1 for GPT-2)
+- During evaluation: Dropout is automatically disabled, passing embeddings through unchanged
+- PyTorch handles this automatically via `model.train()` and `model.eval()`
+
+**Important Note**: The dropout layer scales the remaining values by `1/(1-p)` during training to maintain the expected sum. For example, with 10% dropout, remaining values are scaled by ~1.11x. This ensures consistent activation magnitudes between training and inference.
 
 ## Your Task
 
@@ -116,7 +172,7 @@ Example:
 - **Vocabulary size**: Number of unique tokens (e.g., 50,257 for GPT-2)
 - **Embedding dimension**: Size of the dense vector (e.g., 768 for GPT-2 small)
 - **Max positions**: Maximum sequence length supported (e.g., 1024 for GPT-2)
-- **Dropout**: Regularization technique that randomly zeros some elements during training
+- **Dropout**: Regularization technique that randomly zeros elements during training to prevent overfitting. Applied to embeddings with probability 0.1 (10%) in GPT-2. Includes automatic scaling to maintain expected values.
 - **Device placement**: Ensuring tensors are on the same device (CPU/GPU)
 
 ## Next Steps

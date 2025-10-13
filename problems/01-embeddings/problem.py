@@ -45,7 +45,7 @@ class Embeddings(nn.Module):
             - Use nn.Embedding(num_embeddings, embedding_dim) for both token and position embeddings
             - Token embeddings: vocab_size → n_embd
             - Position embeddings: n_positions → n_embd
-            - Use nn.Dropout for regularization
+            - Use nn.Dropout for regularization (prevents overfitting by randomly zeroing elements during training)
         """
         super().__init__()
 
