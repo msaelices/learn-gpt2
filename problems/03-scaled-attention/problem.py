@@ -43,15 +43,15 @@ class ScaledAttention(nn.Module):
         super().__init__()
 
         # TODO: Create query projection layer
-        # Hint: self.query = nn.Linear(n_embd, n_embd)
+        # Hint: Use nn.Linear to project from n_embd to n_embd
         raise NotImplementedError("Create query projection layer")
 
         # TODO: Create key projection layer
-        # Hint: self.key = nn.Linear(n_embd, n_embd)
+        # Hint: Use nn.Linear to project from n_embd to n_embd
         raise NotImplementedError("Create key projection layer")
 
         # TODO: Create value projection layer
-        # Hint: self.value = nn.Linear(n_embd, n_embd)
+        # Hint: Use nn.Linear to project from n_embd to n_embd
         raise NotImplementedError("Create value projection layer")
 
     def forward(self, x: Tensor) -> Tensor:
@@ -74,29 +74,25 @@ class ScaledAttention(nn.Module):
             - Multiply weights by V
         """
         # TODO: Project input to queries, keys, and values
-        # Hint: Same as Problem 2
-        # q = self.query(x)
-        # k = self.key(x)
-        # v = self.value(x)
+        # Hint: Same as Problem 2 - use the projection layers defined in __init__
         raise NotImplementedError("Project input to Q, K, V")
 
         # TODO: Compute attention scores (Q @ K^T)
-        # Hint: attn_scores = q @ k.transpose(-2, -1)
+        # Hint: Use matrix multiplication with transposed keys
         raise NotImplementedError("Compute attention scores")
 
         # TODO: Scale the attention scores by √d_k
-        # Hint 1: Get d_k from the last dimension of q: d_k = q.size(-1)
-        # Hint 2: Compute scale factor: scale = d_k ** -0.5 (same as 1/√d_k)
-        # Hint 3: Multiply scores by scale: attn_scores = attn_scores * scale
-        # Alternative: attn_scores = attn_scores / math.sqrt(d_k)
+        # Hint 1: Get d_k from the last dimension of the query tensor
+        # Hint 2: Compute scale factor as 1/√d_k (you can use ** -0.5 or math.sqrt)
+        # Hint 3: Multiply the scores by the scale factor
         raise NotImplementedError("Scale attention scores by √d_k")
 
         # TODO: Apply softmax to get attention weights
-        # Hint: attn_weights = torch.softmax(attn_scores, dim=-1)
+        # Hint: Use torch.softmax on the last dimension
         raise NotImplementedError("Apply softmax to get attention weights")
 
         # TODO: Apply attention weights to values
-        # Hint: output = attn_weights @ v
+        # Hint: Use matrix multiplication between attention weights and values
         raise NotImplementedError("Apply attention weights to values")
 
         # TODO: Return the output
