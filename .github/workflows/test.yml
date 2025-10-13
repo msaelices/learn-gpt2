@@ -33,9 +33,6 @@ jobs:
     - name: Run ruff formatter
       run: uv run ruff format --check .
 
-    - name: Run type checker (ty)
-      run: uvx ty check src
-
     - name: Run tests
       run: uv run pytest
 

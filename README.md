@@ -240,14 +240,6 @@ Check code quality:
 uv run ruff check .
 ```
 
-### Type Checking
-
-Run type checking:
-
-```bash
-uvx ty check src
-```
-
 ## 📚 Project Structure
 
 ```
