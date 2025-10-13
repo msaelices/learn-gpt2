@@ -9,6 +9,7 @@ Learning objectives:
 TODO: Complete the Embeddings class below by implementing __init__ and forward methods.
 """
 
+import torch
 import torch.nn as nn
 from torch import Tensor
 
@@ -48,19 +49,10 @@ class Embeddings(nn.Module):
         """
         super().__init__()
 
-        # TODO: Create token embedding layer (wte)
-        # This should map vocab_size token IDs to n_embd dimensional vectors
-        # Hint: self.wte = nn.Embedding(...)
-        raise NotImplementedError("Create token embedding layer (wte)")
+        self.wte = nn.Embedding(num_embeddings=vocab_size, embedding_dim=n_embd)
+        self.wpe = nn.Embedding(num_embeddings=vocab_size, embedding_dim=n_embd)
 
-        # TODO: Create position embedding layer (wpe)
-        # This should map n_positions position indices to n_embd dimensional vectors
-        # Hint: self.wpe = nn.Embedding(...)
-        raise NotImplementedError("Create position embedding layer (wpe)")
-
-        # TODO: Create dropout layer
-        # Hint: self.drop = nn.Dropout(...)
-        raise NotImplementedError("Create dropout layer")
+        self.dropout = nn.Dropout(p=embd_pdrop)
 
     def forward(self, input_ids: Tensor) -> Tensor:
         """Forward pass: convert token IDs to embeddings.
@@ -81,41 +73,33 @@ class Embeddings(nn.Module):
             - Add them together element-wise
             - Apply dropout to the result
         """
-        # TODO: Get the batch size and sequence length from input_ids
-        # Hint: Use the size() method in input_ids tensor
-        raise NotImplementedError("Get batch_size and seq_len from input_ids")
+        batch_size, seq_len = input_ids.size()
 
         # TODO: Create position indices [0, 1, 2, ..., seq_len-1]
-        # Hint: Use torch.arange()
         # Important: Make sure position_ids is on the same device as input_ids!
-        raise NotImplementedError("Create position indices")
+        position_ids = torch.arange(
+            0,
+            seq_len,
+            device=input_ids.device,
+        )
 
         # TODO: Expand position_ids to have a batch dimension
         # Shape should go from (seq_len,) to (batch_size, seq_len)
-        # Hint: Use unsqueeze() and expand() methods in position_ids
-        raise NotImplementedError("Expand position_ids to match batch size")
+        position_ids = position_ids.unsqueeze(0).expand(batch_size, seq_len)
 
         # TODO: Get token embeddings
-        # Hint: Remember self.wte defined before
         # Expected shape: (batch_size, seq_len, n_embd)
-        raise NotImplementedError("Get token embeddings")
+        token_embeddings = self.wte(input_ids)
 
         # TODO: Get position embeddings
-        # Hint: Rembember self.wpe defined before
         # Expected shape: (batch_size, seq_len, n_embd)
-        raise NotImplementedError("Get position embeddings")
+        position_embeddings = self.wpe(position_ids)
 
         # TODO: Combine token and position embeddings by adding them
-        # Hint: embeddings = token_embeddings + position_embeddings
-        raise NotImplementedError("Combine embeddings")
+        embeddings = token_embeddings + position_embeddings
 
         # TODO: Apply dropout
-        # Hint: Remember self.drop defined before
-        raise NotImplementedError("Apply dropout")
-
-        # TODO: Return the final embeddings
-        # Expected shape: (batch_size, seq_len, n_embd)
-        raise NotImplementedError("Return embeddings")
+        return self.dropout(embeddings)
 
 
 # Example usage (uncomment to test):
@@ -131,4 +115,4 @@ class Embeddings(nn.Module):
 #
 #     print(f"Input shape: {input_ids.shape}")
 #     print(f"Output shape: {output.shape}")
-#     print(f"Expected output shape: (2, 10, 768)")
+#     print("Expected output shape: (2, 10, 768)")
