@@ -82,26 +82,26 @@ class Embeddings(nn.Module):
             - Apply dropout to the result
         """
         # TODO: Get the batch size and sequence length from input_ids
-        # Hint: batch_size, seq_len = input_ids.size()
+        # Hint: Use the size() method in input_ids tensor
         raise NotImplementedError("Get batch_size and seq_len from input_ids")
 
         # TODO: Create position indices [0, 1, 2, ..., seq_len-1]
-        # Hint: Use torch.arange(0, seq_len, dtype=torch.long, device=input_ids.device)
+        # Hint: Use torch.arange()
         # Important: Make sure position_ids is on the same device as input_ids!
         raise NotImplementedError("Create position indices")
 
         # TODO: Expand position_ids to have a batch dimension
         # Shape should go from (seq_len,) to (batch_size, seq_len)
-        # Hint: position_ids = position_ids.unsqueeze(0).expand(batch_size, seq_len)
+        # Hint: Use unsqueeze() and expand() methods in position_ids
         raise NotImplementedError("Expand position_ids to match batch size")
 
         # TODO: Get token embeddings
-        # Hint: token_embeddings = self.wte(input_ids)
+        # Hint: Remember self.wte defined before
         # Expected shape: (batch_size, seq_len, n_embd)
         raise NotImplementedError("Get token embeddings")
 
         # TODO: Get position embeddings
-        # Hint: position_embeddings = self.wpe(position_ids)
+        # Hint: Rembember self.wpe defined before
         # Expected shape: (batch_size, seq_len, n_embd)
         raise NotImplementedError("Get position embeddings")
 
@@ -110,7 +110,7 @@ class Embeddings(nn.Module):
         raise NotImplementedError("Combine embeddings")
 
         # TODO: Apply dropout
-        # Hint: embeddings = self.drop(embeddings)
+        # Hint: Remember self.drop defined before
         raise NotImplementedError("Apply dropout")
 
         # TODO: Return the final embeddings
