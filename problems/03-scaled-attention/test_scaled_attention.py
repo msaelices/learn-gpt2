@@ -6,7 +6,7 @@ Run with: uv run pytest test_scaled_attention.py -v
 import pytest
 import torch
 import torch.nn as nn
-from problem import ScaledAttention
+from solution import ScaledAttention
 
 
 def test_initialization():

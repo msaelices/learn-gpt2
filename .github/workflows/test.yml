@@ -34,7 +34,13 @@ jobs:
       run: uv run ruff format --check .
 
     - name: Run tests
-      run: uv run pytest
+      run: |
+        for dir in problems/*/; do
+          echo "Testing $dir"
+          cd "$dir"
+          PYTHONPATH=. uv run pytest test_*.py -v || exit 1
+          cd ../..
+        done
 
     - name: Upload coverage reports
       if: matrix.python-version == '3.12'

@@ -6,7 +6,7 @@ Run with: uv run pytest test_attention.py -v
 import pytest
 import torch
 import torch.nn as nn
-from problem import SimpleAttention
+from solution import SimpleAttention
 
 
 def test_initialization():

@@ -6,7 +6,7 @@ Run with: python -m pytest test_embeddings.py -v
 import pytest
 import torch
 import torch.nn as nn
-from problem import Embeddings
+from solution import Embeddings
 
 
 def test_initialization():
