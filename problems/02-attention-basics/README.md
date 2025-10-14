@@ -21,9 +21,19 @@ At its heart, attention asks three questions for each token:
 2. **Key (K)**: "What do I offer?"
 3. **Value (V)**: "What information do I contain?"
 
+Why three different vectors? Because they serve different purposes:
+- **Query**: Represents what the current token wants to know
+- **Key**: Represents what each token can provide
+- **Value**: The actual information content of each token
+
+Why do we need a Value vector if we have the input information? Because the Value vector can be transformed differently from the input, allowing the model to learn what information is most relevant to pass along.
+
+So the X would be the raw input embeddings, and Q, K, V are learned projections of X.
+
 ### How It Works
 
 1. Each input token is projected into three vectors: Q, K, and V
+   - What projections? Linear layers (learned weight matrices)
 2. Compute attention scores: How much should each token attend to every other token?
    - Score = Q @ K^T (dot product between queries and keys)
 3. Apply softmax to get attention weights (probabilities that sum to 1)
