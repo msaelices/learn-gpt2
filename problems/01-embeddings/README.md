@@ -39,7 +39,17 @@ Position 1 → [0.3, -0.2, 0.4, ...]
 ...and so on
 
 **Why Are Position Embeddings Necessary?**
-Without position information, the transformer would treat "dog bites man" identically to "man bites dog" - the attention mechanism is inherently permutation-invariant. Position embeddings inject crucial word order information.
+Without position information, the transformer would treat "dog bites man" identically to "man bites dog"
+
+Also, the word "crane" has the same embedding whether if it's a bird or a machine.
+
+To help the model understand word order and context, we add position embeddings.
+
+The length of the position embeddings must match the input sequence length. If our input sequence has length `seq_len`, we need position embeddings for positions `0` to `seq_len-1`.
+
+Why the seq_len-1 size and not block_size?
+- `seq_len` is the actual length of the input sequence, which can vary.
+- For the final embeddings, we will sum both token and position embeddings, so they must match in size.
 
 **GPT-2's Approach**
 GPT-2 uses *learned* position embeddings rather than sinusoidal (fixed) encodings used in the original Transformer:
