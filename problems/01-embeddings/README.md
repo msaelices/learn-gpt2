@@ -27,8 +27,49 @@ Neural networks can't process discrete symbols (words/tokens) directly. Embeddin
 - Reduce dimensionality compared to one-hot encoding (768 dimensions vs 50,257)
 - Enable mathematical operations like addition and similarity computation
 
+**How Embeddings Capture Semantic Meaning**
+
+The power of embeddings lies in their ability to encode semantic meaning within the vector space. Here's how this works:
+
+1. **Semantic Similarity Through Geometry**: Words with similar meanings end up with similar vector representations. For example:
+   - "king" and "queen" might have vectors close together in the embedding space
+   - "cat" and "dog" (both animals) would be closer than "cat" and "airplane"
+   - "happy" and "joyful" would have high similarity, while "happy" and "sad" would be distant
+
+2. **Multi-dimensional Meaning**: Each of the 768 dimensions can capture different aspects of meaning:
+   - Some dimensions might encode "is-a-noun" vs "is-a-verb"
+   - Others might capture "positive-sentiment" vs "negative-sentiment"
+   - Some might encode "is-animate" vs "is-inanimate"
+   - Many dimensions work together to capture complex semantic relationships
+
+3. **Learned Representations**: Unlike one-hot encoding (where each token is just a unique ID with no inherent meaning), embeddings learn to place tokens in meaningful positions:
+   ```
+   One-hot encoding:
+   "cat"  = [0, 0, 1, 0, 0, ..., 0]  (50,257 dimensions, all zeros except one)
+   "dog"  = [0, 1, 0, 0, 0, ..., 0]  (no relationship captured)
+
+   Dense embeddings:
+   "cat"  = [0.2, -0.1, 0.5, ..., 0.3]  (768 dimensions)
+   "dog"  = [0.3, -0.2, 0.4, ..., 0.2]  (similar values = similar meaning)
+   ```
+
+4. **Contextual Relationships**: During training, tokens that appear in similar contexts develop similar embeddings. If "cat" and "dog" often appear in similar sentence structures ("The ___ ran", "I pet the ___"), their embeddings will naturally move closer together in the vector space.
+
+5. **Analogical Reasoning**: Well-trained embeddings can even capture analogies through vector arithmetic:
+   - vector("king") - vector("man") + vector("woman") ≈ vector("queen")
+   - This works because the vector space encodes relationships like "royalty" and "gender"
+
+6. **Why 768 Dimensions?**: This high dimensionality allows embeddings to capture nuanced semantic distinctions:
+   - "bank" (financial) vs "bank" (river) can be distinguished in context
+   - Subtle differences like "walk", "stroll", "saunter" can be encoded
+   - Multiple aspects of meaning can coexist without interference
+
 **Learned vs Fixed**
-Unlike older methods (e.g., Word2Vec), GPT-2's token embeddings are learned end-to-end as part of model training. They start random and gradually learn to represent tokens in ways useful for language modeling.
+Unlike older methods (e.g., Word2Vec), GPT-2's token embeddings are learned end-to-end as part of model training. They start random and gradually learn to represent tokens in ways useful for language modeling. As the model sees millions of text examples, it adjusts each token's embedding to:
+- Minimize prediction error
+- Capture distributional semantics (what contexts the token appears in)
+- Encode relationships with other tokens
+- Support the model's ultimate goal: predicting the next token in a sequence
 
 ### Position Embeddings
 

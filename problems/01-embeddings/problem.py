@@ -125,16 +125,16 @@ class Embeddings(nn.Module):
 
 
 # Example usage (uncomment to test):
-# if __name__ == "__main__":
-#     # Create embeddings module
-#     embeddings = Embeddings(vocab_size=50257, n_positions=1024, n_embd=768)
-#
-#     # Create sample input (batch_size=2, seq_len=10)
-#     input_ids = torch.randint(0, 50257, (2, 10))
-#
-#     # Forward pass
-#     output = embeddings(input_ids)
-#
-#     print(f"Input shape: {input_ids.shape}")
-#     print(f"Output shape: {output.shape}")
-#     print(f"Expected output shape: (2, 10, 768)")
+if __name__ == "__main__":
+    # Create embeddings module
+    embeddings = Embeddings(vocab_size=50257, n_positions=1024, n_embd=768)
+
+    # Create sample input (batch_size=2, seq_len=10)
+    input_ids = torch.randint(0, 50257, (2, 10))
+
+    # Forward pass
+    output = embeddings(input_ids)
+
+    print(f"Input shape: {input_ids.shape}")
+    print(f"Output shape: {output.shape}")
+    print(f"Expected output shape: (2, 10, 768)")
