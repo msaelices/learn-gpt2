@@ -6,7 +6,10 @@ Run with: python -m pytest test_embeddings.py -v
 import pytest
 import torch
 import torch.nn as nn
-from solution import Embeddings
+# uncomment the following line and comment the next one 
+# when you have implemented the problem
+# from .problem import Embeddings
+from .solution import Embeddings
 
 
 def test_initialization():

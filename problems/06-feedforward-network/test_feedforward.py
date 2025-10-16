@@ -3,7 +3,10 @@
 import pytest
 import torch
 import torch.nn as nn
-from solution import FeedForward, NewGELU
+# uncomment the following line and comment the next one
+# when you have implemented the problem
+# from .problem import FeedForward, NewGELU
+from .solution import FeedForward, NewGELU
 
 
 def test_gelu_initialization():

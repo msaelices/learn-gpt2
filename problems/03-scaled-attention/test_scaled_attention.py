@@ -6,7 +6,10 @@ Run with: uv run pytest test_scaled_attention.py -v
 import pytest
 import torch
 import torch.nn as nn
-from solution import ScaledAttention
+# uncomment the following line and comment the next one
+# when you have implemented the problem
+# from .problem import ScaledAttention
+from .solution import ScaledAttention
 
 
 def test_initialization():

@@ -6,7 +6,10 @@ sys.path.append("../09-gpt2-config")
 
 import pytest
 import torch
-from solution import GPT2Config, GPT2Model
+# uncomment the following line and comment the next one
+# when you have implemented the problem
+# from .problem import GPT2Config, GPT2Model
+from .solution import GPT2Config, GPT2Model
 
 
 def test_model_initialization():

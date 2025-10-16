@@ -3,7 +3,10 @@
 import pytest
 import torch
 import torch.nn as nn
-from solution import TransformerBlock
+# uncomment the following line and comment the next one
+# when you have implemented the problem
+# from .problem import TransformerBlock
+from .solution import TransformerBlock
 
 
 def test_transformer_block_initialization():

@@ -3,7 +3,10 @@
 import pytest
 import torch
 import torch.nn as nn
-from solution import MultiHeadAttention
+# uncomment the following line and comment the next one
+# when you have implemented the problem
+# from .problem import MultiHeadAttention
+from .solution import MultiHeadAttention
 
 
 def test_initialization():

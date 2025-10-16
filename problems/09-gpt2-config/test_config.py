@@ -1,7 +1,10 @@
 """Tests for Problem 9: GPT-2 Configuration."""
 
 import pytest
-from solution import GPT2Config
+# uncomment the following line and comment the next one
+# when you have implemented the problem
+# from .problem import GPT2Config
+from .solution import GPT2Config
 
 
 def test_config_initialization():

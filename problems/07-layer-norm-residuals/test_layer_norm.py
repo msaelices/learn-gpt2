@@ -3,7 +3,10 @@
 import pytest
 import torch
 import torch.nn as nn
-from solution import ResidualConnection
+# uncomment the following line and comment the next one
+# when you have implemented the problem
+# from .problem import ResidualConnection
+from .solution import ResidualConnection
 
 
 def test_residual_initialization():

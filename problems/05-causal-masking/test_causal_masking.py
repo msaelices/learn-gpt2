@@ -2,7 +2,10 @@
 
 import pytest
 import torch
-from solution import CausalMultiHeadAttention
+# uncomment the following line and comment the next one
+# when you have implemented the problem
+# from .problem import CausalMultiHeadAttention
+from .solution import CausalMultiHeadAttention
 
 
 def test_initialization():
