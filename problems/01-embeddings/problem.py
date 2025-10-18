@@ -9,6 +9,7 @@ Learning objectives:
 TODO: Complete the Embeddings class below by implementing __init__ and forward methods.
 """
 
+import torch
 import torch.nn as nn
 from torch import Tensor
 
@@ -137,4 +138,4 @@ if __name__ == "__main__":
 
     print(f"Input shape: {input_ids.shape}")
     print(f"Output shape: {output.shape}")
-    print(f"Expected output shape: (2, 10, 768)")
+    print("Expected output shape: (2, 10, 768)")
