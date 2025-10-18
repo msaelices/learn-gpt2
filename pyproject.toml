@@ -58,3 +58,8 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "problems/**/test_*.py" = ["B018", "F841"]
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.406",
+]
